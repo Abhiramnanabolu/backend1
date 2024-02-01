@@ -56,3 +56,29 @@ app.get("/users/all", async (request, response) => {
     const book = await db.all(getBookQuery);
     response.send(book);
   });
+
+  app.get("/users/:userId/", async (request, response) => {
+    const { userId } = request.params;
+    const getBookQuery = `
+      SELECT
+        *
+      FROM
+        users
+      WHERE
+        user_id = "${userId}";`;
+    const book = await db.get(getBookQuery);
+    response.send(book);
+  });
+
+  app.get("/user_details/:userId/",async(request,response)=>{
+    const { userId } = request.params;
+    const getBookQuery = `
+      SELECT
+        *
+      FROM
+        user_details
+      WHERE
+        user_id = "${userId}";`;
+    const book = await db.get(getBookQuery);
+    response.send(book);
+  })
