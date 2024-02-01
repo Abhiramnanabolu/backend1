@@ -3,6 +3,7 @@ const path = require("path");
 const cors = require("cors")
 const { open } = require("sqlite");
 const sqlite3 = require("sqlite3");
+const { request } = require("http");
 const app = express();
 app.use(cors())
 const port=process.env.PORT || 3000
@@ -26,6 +27,15 @@ const initializeDBAndServer = async () => {
 };
 initializeDBAndServer();
 app.use(express.json());
+
+app.get("/",async(request,response)=>{
+  response.send("Checking if it works")
+})
+
+app.get("/manoj",async(request,response)=>{
+  response.send("Hii Manoj")
+})
+
 
 app.get("/users/all", async (request, response) => {
     const getBookQuery = `
