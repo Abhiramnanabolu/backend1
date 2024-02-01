@@ -10,14 +10,14 @@ const dbPath = path.join(__dirname, "chatapp.db");
 
 let db = null;
 
-const initializeDBAndServer = async () => {ś
+const initializeDBAndServer = async () => {
   try {
     db = await open({
       filename: dbPath,
       driver: sqlite3.Database,
     });
-    app.listen(3000, () => {
-      console.log("Server Running at http://localhost:3000/");
+    app.listen(3001, () => {
+      console.log("Server Running at http://localhost:5000/");
     });
   } catch (e) {
     console.log(`DB Error: ${e.message}`);
@@ -27,10 +27,20 @@ const initializeDBAndServer = async () => {ś
 initializeDBAndServer();
 app.use(express.json());
 
-app.get("/", async (request, response) => {
+app.get("/users/all", async (request, response) => {
     const getBookQuery = `
       SELECT
         *
+      FROM
+        users`;
+    const book = await db.all(getBookQuery);
+    response.send(book);
+  });
+
+  app.get("/users/usernames", async (request, response) => {
+    const getBookQuery = `
+      SELECT
+        user_name
       FROM
         users`;
     const book = await db.all(getBookQuery);
