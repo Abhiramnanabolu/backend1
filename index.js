@@ -108,9 +108,14 @@ app.get("/users/all", async (request, response) => {
     const { username, password } = request.body;
     const selectUserQuery = `SELECT * FROM users WHERE user_name = '${username}'`;
     const dbUser = await db.get(selectUserQuery);
-    if (dbUser === undefined) {
+  
+    if (!dbUser || dbUser.password !== password) {
       response.status(401).json({ success: false, message: 'Invalid username or password' });
     } else {
+      // You might want to exclude sensitive information like passwords before sending the user data
+      const { password, ...user } = dbUser;
+  
       response.json({ success: true, message: 'Login successful', user });
     }
   });
+  
