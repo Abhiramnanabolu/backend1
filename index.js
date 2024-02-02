@@ -1,4 +1,5 @@
 const express = require("express");
+const uuid = require("uuid")
 const path = require("path");
 const cors = require("cors")
 const { open } = require("sqlite");
@@ -82,3 +83,41 @@ app.get("/users/all", async (request, response) => {
     const book = await db.get(getBookQuery);
     response.send(book);
   })
+
+  app.post("/users/", async (request, response) => {
+    const bookDetails = request.body;
+    const { userName,name,password } = bookDetails;
+    const myId=uuid.v4()
+    const addBookQuery = `
+      INSERT INTO
+        users ( user_id,user_name,name,password)
+      VALUES
+        (
+          '${myId}',
+          ${userName},
+          ${name},
+          ${password}
+        );`;
+  
+    const dbResponse = await db.run(addBookQuery);
+    const district_id = dbResponse.lastID;
+    response.send("District Successfully Added");
+  });
+
+  app.post("/login", async (request, response) => {
+    const { username, password } = request.body;
+    const selectUserQuery = `SELECT * FROM user WHERE username = '${username}'`;
+    const dbUser = await db.get(selectUserQuery);
+    if (dbUser === undefined) {
+      response.status(400);
+      response.send("Invalid User");
+    } else {
+      const isPasswordMatched = password==dbUser.password;
+      if (isPasswordMatched === true) {
+        response.send("Login Success!");
+      } else {
+        response.status(400);
+        response.send("Invalid Password");
+      }
+    }
+  });
