@@ -109,15 +109,8 @@ app.get("/users/all", async (request, response) => {
     const selectUserQuery = `SELECT * FROM users WHERE user_name = '${username}'`;
     const dbUser = await db.get(selectUserQuery);
     if (dbUser === undefined) {
-      response.status(400);
-      response.send("Invalid User");
+      response.status(401).json({ success: false, message: 'Invalid username or password' });
     } else {
-      const isPasswordMatched = password==dbUser.password;
-      if (isPasswordMatched === true) {
-        response.send(dbUser);
-      } else {
-        response.status(400);
-        response.send("Invalid Password");
-      }
+      response.json({ success: true, message: 'Login successful', user });
     }
   });
