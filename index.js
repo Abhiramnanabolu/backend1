@@ -114,7 +114,7 @@ app.get("/users/all", async (request, response) => {
     } else {
       const isPasswordMatched = password==dbUser.password;
       if (isPasswordMatched === true) {
-        response.send("Login Success!");
+        response.send(dbUser);
       } else {
         response.status(400);
         response.send("Invalid Password");
