@@ -29,15 +29,6 @@ const initializeDBAndServer = async () => {
 initializeDBAndServer();
 app.use(express.json());
 
-app.get("/",async(request,response)=>{
-  response.send("Checking if it works")
-})
-
-app.get("/manoj",async(request,response)=>{
-  response.send("Hii Manoj")
-})
-
-
 app.get("/users/all", async (request, response) => {
     const getBookQuery = `
       SELECT
@@ -71,20 +62,8 @@ app.get("/users/all", async (request, response) => {
     response.send(book);
   });
 
-  app.get("/user_details/:userId/",async(request,response)=>{
-    const { userId } = request.params;
-    const getBookQuery = `
-      SELECT
-        *
-      FROM
-        user_details
-      WHERE
-        user_id = "${userId}";`;
-    const book = await db.get(getBookQuery);
-    response.send(book);
-  })
 
-  app.post("/users/", async (request, response) => {
+  app.post("/register", async (request, response) => {
     const bookDetails = request.body;
     const { userName,name,password } = bookDetails;
     const myId=uuid.v4()
@@ -100,8 +79,7 @@ app.get("/users/all", async (request, response) => {
         );`;
   
     const dbResponse = await db.run(addBookQuery);
-    const district_id = dbResponse.lastID;
-    response.send("District Successfully Added");
+    response.json({ success: true, message: 'SignUp successful', myId });
   });
 
   app.post("/login", async (request, response) => {
@@ -118,4 +96,18 @@ app.get("/users/all", async (request, response) => {
       response.json({ success: true, message: 'Login successful', user });
     }
   });
+  
+  app.get("/user_details/:userId/",async(request,response)=>{
+    const { userId } = request.params;
+    const getBookQuery = `
+      SELECT
+        *
+      FROM
+        user_details
+      WHERE
+        user_id = "${userId}";`;
+    const book = await db.get(getBookQuery);
+    response.send(book);
+  })
+
   
