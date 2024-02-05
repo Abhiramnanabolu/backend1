@@ -73,9 +73,9 @@ app.get("/users/all", async (request, response) => {
       VALUES
         (
           '${myId}',
-          ${userName},
-          ${name},
-          ${password}
+          '${userName}',
+          '${name}',
+          '${password}'
         );`;
   
     const dbResponse = await db.run(addBookQuery);
