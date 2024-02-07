@@ -80,7 +80,7 @@ app.get("/users/all", async (request, response) => {
         );`;
   
     const dbResponse = await db.run(addBookQuery);
-    response.json({ success: true, message: 'SignUp successful', myId ,bookDetails});
+    response.json(dbResponse);
   });
 
   app.post("/login", async (request, response) => {
