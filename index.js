@@ -64,27 +64,23 @@ app.get("/users/all", async (request, response) => {
 
 
   app.post("/register", async (request, response) => {
-    try {
-      const { userName, name, password } = req.body;
-
-      // Generate a unique user_id using uuid
-      const user_id = uuidv4();
-
-      // Insert data into the database
-      db.run(`
-          INSERT INTO users (id, username, name, password)
-          VALUES (?, ?, ?, ?)
-      `, [user_id, username, name, password], function (err) {
-          if (err) {
-              return res.status(500).json({ error: err.message });
-          }
-
-          // Return the user_id as a response
-          res.status(201).json({ id: user_id });
-      });
-  } catch (err) {
-      res.status(500).json({ error: err.message });
-  }
+    const bookDetails = request.body;
+    console.log(bookDetails)
+    const { userName,name,password } = bookDetails;
+    const myId=uuid.v4()
+    const addBookQuery = `
+      INSERT INTO
+        users ( user_id,user_name,name,password)
+      VALUES
+        (
+          '${myId}',
+          '${userName}',
+          '${name}',
+          '${password}'
+        );`;
+  
+    const dbResponse = await db.run(addBookQuery);
+    response.send(dbResponse);
   });
 
   app.post("/login", async (request, response) => {
