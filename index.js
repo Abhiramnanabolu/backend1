@@ -65,7 +65,6 @@ app.get("/users/all", async (request, response) => {
 
   app.post("/register", async (request, response) => {
     const bookDetails = request.body;
-    console.log(bookDetails)
     const { userName,name,password } = bookDetails;
     const myId=uuid.v4()
     const addBookQuery = `
@@ -80,7 +79,7 @@ app.get("/users/all", async (request, response) => {
         );`;
   
     const dbResponse = await db.run(addBookQuery);
-    response.send(dbResponse);
+    response.send(bookDetails);
   });
 
   app.post("/login", async (request, response) => {
