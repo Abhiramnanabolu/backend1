@@ -79,7 +79,7 @@ app.get("/users/all", async (request, response) => {
         );`;
   
     const dbResponse = await db.run(addBookQuery);
-    response.send(bookDetails);
+    response.send(myId);
   });
 
   app.post("/login", async (request, response) => {
