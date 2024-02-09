@@ -19,7 +19,7 @@ const initializeDBAndServer = async () => {
       driver: sqlite3.Database,
     });
     app.listen(port, () => {
-      console.log("Server Running at http://localhost:3001/");
+      console.log("Server Running at http://localhost:3000/");
     });
   } catch (e) {
     console.log(`DB Error: ${e.message}`);
@@ -62,6 +62,18 @@ app.get("/users/all", async (request, response) => {
     response.send(book);
   });
 
+  app.get("/user_details/:userId/",async(request,response)=>{
+    const { userId } = request.params;
+    const getBookQuery = `
+      SELECT
+        *
+      FROM
+        user_details
+      WHERE
+        user_id = "${userId}";`;
+    const book = await db.get(getBookQuery);
+    response.send(book);
+  })
 
   app.post("/register", async (request, response) => {
     const bookDetails = request.body;
@@ -88,26 +100,11 @@ app.get("/users/all", async (request, response) => {
     const dbUser = await db.get(selectUserQuery);
   
     if (!dbUser || dbUser.password !== password) {
-      response.status(401).json({ success: false, message: 'Invalid username or password' });
+      response.status(401).json({ success: false, message: 'Invalid username or password',dbUser});
     } else {
-      // You might want to exclude sensitive information like passwords before sending the user data
       const { password, ...user } = dbUser;
   
       response.json({ success: true, message: 'Login successful', user });
     }
   });
-  
-  app.get("/user_details/:userId/",async(request,response)=>{
-    const { userId } = request.params;
-    const getBookQuery = `
-      SELECT
-        *
-      FROM
-        user_details
-      WHERE
-        user_id = "${userId}";`;
-    const book = await db.get(getBookQuery);
-    response.send(book);
-  })
-
   
