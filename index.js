@@ -7,7 +7,7 @@ const sqlite3 = require("sqlite3");
 const { request } = require("http");
 const app = express();
 app.use(cors())
-const port=process.env.PORT || 3000
+const port=process.env.PORT || 3001
 const dbPath = path.join(__dirname, "chatapp.db");
 
 let db = null;
@@ -19,7 +19,7 @@ const initializeDBAndServer = async () => {
       driver: sqlite3.Database,
     });
     app.listen(port, () => {
-      console.log("Server Running at http://localhost:3000/");
+      console.log("Server Running at http://localhost:3001/");
     });
   } catch (e) {
     console.log(`DB Error: ${e.message}`);
